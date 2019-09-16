@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/fileUtils/FicheroTxt.java</file>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/compression/GZIPCompression.java</file>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/CoreUtils.java</file>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/Core.java</file>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/Config.java</file>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/encryption/AES.java</file>
-            <file>file:/home/dnllns/NetBeansProjects/StegoDroid/src/stegoTool/fileUtils/Fichero.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/Payload.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/Core.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/Config.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/encryption/Md5.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/Header.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/compression/GZIPCompression.java</file>
         </group>
     </open-files>
 </project-private>

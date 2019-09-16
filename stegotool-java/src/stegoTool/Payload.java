@@ -1,13 +1,16 @@
 package stegoTool;
 
+import java.util.Base64;
+import stegoTool.compression.GZIPCompression;
+import stegoTool.encryption.AES;
+
 /**
  *
  * @author dnllns
  */
 public class Payload {
-
-    private final String carga;               //Carga en texto plano
-    private final String binary;        //Carga binaria
+    
+    private String carga;         //Carga en texto plano
 
     /**
      * Constructor
@@ -16,7 +19,6 @@ public class Payload {
      */
     public Payload(String contenidoOriginal) {
         carga = contenidoOriginal + " ";
-        binary = binaryEncode(carga);
     }
 
     /**
@@ -26,16 +28,24 @@ public class Payload {
      * @return un string equivalente al valor binario del recibido
      */
     public static String binaryEncode(String payload) {
-        byte[] bytes = payload.getBytes();
-        StringBuilder bin = new StringBuilder();
-        for (byte b : bytes) {
-            int val = b;
-            for (int i = 0; i < 8; i++) {
-                bin.append((val & 128) == 0 ? 0 : 1);
-                val <<= 1;
-            }
+//        byte[] bytes = payload.getBytes();
+//        StringBuilder bin = new StringBuilder();
+//        for (byte b : bytes) {
+//            int val = b;
+//            for (int i = 0; i < 8; i++) {
+//                bin.append((val & 128) == 0 ? 0 : 1);
+//                val <<= 1;
+//            }
+//        }
+//        return bin.toString();
+
+        String finalString = "";
+        for (int i = 0; i < payload.length(); i++) {  
+            int tempChar = (int) payload.charAt(i);
+            finalString = finalString + Integer.toString(tempChar, 2);
         }
-        return bin.toString();
+        
+        return finalString;
     }
 
     /**
@@ -43,7 +53,7 @@ public class Payload {
      * @return
      */
     public static String binaryDecode(boolean[] bin) {
-
+        
         String stringExtraido = "";
         String byyte = "";
         int contadorBit = 0;
@@ -55,28 +65,27 @@ public class Payload {
             }
             contadorBit++;
             if (contadorBit == 8) {
-
+                
                 stringExtraido = stringExtraido + (char) Integer.parseInt(byyte, 2);
                 byyte = "";
                 contadorBit = 0;
-
+                
             }
-
+            
         }
         return stringExtraido;
     }
-
-    /**
-     * Genera la carga que contiene la info del tamaño
-     *
-     * @return
-     */
-    public String encapsularTam() {
-        return binaryEncode(binary.length() + "|#||");
+    
+    public void compress() {
+        carga = Base64.getEncoder().encodeToString(GZIPCompression.compress(carga));
     }
-
+    
+    public void encrypt(String password) {
+        carga = AES.encrypt(carga, password);
+    }
+    
     public String getBinary() {
-        return binary;
+        return binaryEncode(carga);
     }
-
+    
 }

@@ -2,12 +2,12 @@ package stegoTool;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import stegoTool.encryption.Md5;
 
 /**
  *
  * @author dnllns
  */
-
 public class Core {
 
     private boolean modo;
@@ -17,8 +17,8 @@ public class Core {
     private boolean[] canalesRGB;
     private Pixel pixelActual;
     private int tamCargaBin;
-
-
+    private String rawEncryptedHeader;
+    
 
     /**
      * Constructor para extraer
@@ -28,15 +28,40 @@ public class Core {
     public Core(Config conf) {
 
         imagen = new ImageEdit(CoreUtils.openImage(conf.getInputPath()));
-        modo = conf.getModo();                                        //Modo extraccion
+        modo = conf.isModo();                                        //Modo extraccion
         pixelActual = conf.getPixelInicial();
         canalesRGB = conf.getCanalesRGB();
-        
-        if (modo){
-             carga = new Payload(conf.getInputMessage());        
+
+        if (modo) {
+
+            carga = new Payload(conf.getInputMessage());
+
+            //Encriptado de la carga
+            String encryptionPassword = null;
+            if (conf.isEncryption()) {
+                //Gen random password for encrypt data
+                encryptionPassword = Md5.getMD5(Math.random() + "");
+                carga.encrypt(encryptionPassword);
+            }
+
+            //Compresion de la carga
+            if (conf.isCompression()) {
+                carga.compress();
+            }
+                   
+            //Generar los headers
+            Header header = new Header(
+                    conf.getInputMessage().length(),
+                    Md5.getMD5(conf.getInputMessage()),
+                    encryptionPassword,
+                    conf.getPassword(),
+                    conf.isCompression()
+            );
+            
+            rawEncryptedHeader = header.makeHeader();
+
         }
     }
-
 
     /**
      * Inicia el funcionamiento de la máquina, realiza la funcion que se ha
@@ -65,7 +90,6 @@ public class Core {
         }
     }
 
-    
     /**
      * Inserta la carga en los pixels correspondientes de la imagen
      */
@@ -89,8 +113,6 @@ public class Core {
         imagen.actualizarImagenRGB(pixelesCargaMod);        //CARGA
 
     }
-
-   
 
     /**
      * Recibe un color, un array booleano que representa N bits, y un array con
