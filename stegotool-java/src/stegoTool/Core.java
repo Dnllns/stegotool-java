@@ -51,7 +51,7 @@ public class Core {
                    
             //Generar los headers
             Header header = new Header(
-                    conf.getInputMessage().length(),
+                    CoreUtils.binaryEncode(conf.getInputMessage()).length(),
                     Md5.getMD5(conf.getInputMessage()),
                     encryptionPassword,
                     conf.getPassword(),
@@ -98,15 +98,18 @@ public class Core {
         //Obtener el numero de canales usados
         int numeroCanalesUsados = CoreUtils.countRGBChannels(canalesRGB);
 
-        //Obtener pixeles actualizados con la Carga_Tamaño
-        ArrayList<Pixel> pixelesTamMod = generarPixeles(numeroCanalesUsados, carga.encapsularTam());
+        //Obtener pixeles actualizados con las header
+        ArrayList<Pixel> pixelesTamMod = generarPixeles(
+                numeroCanalesUsados, 
+                rawEncryptedHeader
+        );
 
         ///Actualizo el pixel actual, cambio de filaY +1
         pixelActual.setX(0);
         pixelActual.setY(pixelActual.getY() + 1);
 
         //Obtener pixeles actualizados con la Carga_Carga
-        ArrayList<Pixel> pixelesCargaMod = generarPixeles(numeroCanalesUsados, carga.getBinary());
+        ArrayList<Pixel> pixelesCargaMod = generarPixeles(numeroCanalesUsados, carga.binaryEncode());
 
         //Modificar los pixeles actualizados en la imagen
         imagen.actualizarImagenRGB(pixelesTamMod);          //TAMAÑO

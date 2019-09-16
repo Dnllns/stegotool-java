@@ -27,25 +27,25 @@ public class Payload {
      * @param payload
      * @return un string equivalente al valor binario del recibido
      */
-    public static String binaryEncode(String payload) {
-//        byte[] bytes = payload.getBytes();
-//        StringBuilder bin = new StringBuilder();
-//        for (byte b : bytes) {
-//            int val = b;
-//            for (int i = 0; i < 8; i++) {
-//                bin.append((val & 128) == 0 ? 0 : 1);
-//                val <<= 1;
-//            }
-//        }
-//        return bin.toString();
-
-        String finalString = "";
-        for (int i = 0; i < payload.length(); i++) {  
-            int tempChar = (int) payload.charAt(i);
-            finalString = finalString + Integer.toString(tempChar, 2);
+    public String binaryEncode() {
+        byte[] bytes = carga.getBytes();
+        StringBuilder bin = new StringBuilder();
+        for (byte b : bytes) {
+            int val = b;
+            for (int i = 0; i < 8; i++) {
+                bin.append((val & 128) == 0 ? 0 : 1);
+                val <<= 1;
+            }
         }
+        return bin.toString();
+
+//        String finalString = "";
+//        for (int i = 0; i < payload.length(); i++) {  
+//            int tempChar = (int) payload.charAt(i);
+//            finalString = finalString + Integer.toString(tempChar, 2);
+//        }
         
-        return finalString;
+//        return finalString;
     }
 
     /**
@@ -84,8 +84,6 @@ public class Payload {
         carga = AES.encrypt(carga, password);
     }
     
-    public String getBinary() {
-        return binaryEncode(carga);
-    }
+   
     
 }
