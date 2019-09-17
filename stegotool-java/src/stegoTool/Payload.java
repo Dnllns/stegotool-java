@@ -1,5 +1,6 @@
 package stegoTool;
 
+import stegoTool.core.CoreUtils;
 import java.util.Base64;
 import stegoTool.compression.GZIPCompression;
 import stegoTool.encryption.AES;
@@ -9,7 +10,7 @@ import stegoTool.encryption.AES;
  * @author dnllns
  */
 public class Payload {
-    
+
     private String carga;         //Carga en texto plano
 
     /**
@@ -21,69 +22,32 @@ public class Payload {
         carga = contenidoOriginal + " ";
     }
 
-    /**
-     * Recibe un string, devuelbe el mismo string transformado a binario
-     *
-     * @param payload
-     * @return un string equivalente al valor binario del recibido
-     */
     public String binaryEncode() {
-        byte[] bytes = carga.getBytes();
-        StringBuilder bin = new StringBuilder();
-        for (byte b : bytes) {
-            int val = b;
-            for (int i = 0; i < 8; i++) {
-                bin.append((val & 128) == 0 ? 0 : 1);
-                val <<= 1;
-            }
-        }
-        return bin.toString();
-
-//        String finalString = "";
-//        for (int i = 0; i < payload.length(); i++) {  
-//            int tempChar = (int) payload.charAt(i);
-//            finalString = finalString + Integer.toString(tempChar, 2);
-//        }
-        
-//        return finalString;
+        return CoreUtils.binaryEncode(carga);
     }
 
-    /**
-     * @param bin
-     * @return
-     */
     public static String binaryDecode(boolean[] bin) {
-        
-        String stringExtraido = "";
-        String byyte = "";
-        int contadorBit = 0;
-        for (boolean bit : bin) {
-            if (bit) {
-                byyte = byyte + 0;
-            } else {
-                byyte = byyte + 1;
-            }
-            contadorBit++;
-            if (contadorBit == 8) {
-                
-                stringExtraido = stringExtraido + (char) Integer.parseInt(byyte, 2);
-                byyte = "";
-                contadorBit = 0;
-                
-            }
-            
-        }
-        return stringExtraido;
+        return CoreUtils.binaryDecode(bin);
     }
-    
+
     public void compress() {
         carga = Base64.getEncoder().encodeToString(GZIPCompression.compress(carga));
     }
-    
+
+    public void decompress() {
+        carga = GZIPCompression.decompress(Base64.getDecoder().decode(carga));
+    }
+
     public void encrypt(String password) {
         carga = AES.encrypt(carga, password);
     }
-    
-   
-    
+
+    public void decrypt(String password) {
+        carga = AES.decrypt(carga, password);
+    }
+
+    public void encapsulate(String header) {
+        carga = header.length() + ";" + header + carga;
+    }
+
 }

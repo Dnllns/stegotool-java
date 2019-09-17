@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/dnllns/GitHub/stegotool-java/stegotool-java/src/stegoTool/encryption/AES.java</file>
-            <file>file:/home/dnllns/GitHub/stegotool-java/stegotool-java/src/stegoTool/MainLauncher.java</file>
-            <file>file:/home/dnllns/GitHub/stegotool-java/stegotool-java/src/stegoTool/CoreUtils.java</file>
-            <file>file:/home/dnllns/GitHub/stegotool-java/stegotool-java/src/stegoTool/Header.java</file>
-            <file>file:/home/dnllns/GitHub/stegotool-java/stegotool-java/src/stegoTool/Core.java</file>
-            <file>file:/home/dnllns/GitHub/stegotool-java/stegotool-java/src/stegoTool/Payload.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/core/Core.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/Payload.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/MainLauncher.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/Header.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/core/LSB.java</file>
+            <file>file:/C:/Users/Casa/Documents/GitHub/stegotool-java/stegotool-java/src/stegoTool/core/CoreUtils.java</file>
         </group>
     </open-files>
 </project-private>

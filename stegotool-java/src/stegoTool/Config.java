@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package stegoTool;
 
 /**
@@ -11,17 +6,23 @@ package stegoTool;
  */
 public class Config {
 
+    //Files
     private String inputPath;
     private String outputPath;
-    private boolean encryption;
-    private boolean compression;
-    private boolean modo;
-    private Pixel pixelInicial;
-    private boolean[] canalesRGB;
-    private String inputMessage;
     private String inputMessageFilePath;
     private String outputMessageFilePath;
+
+    //Options
+    private boolean modo;
+    private boolean encrypted;
+    private boolean compressed;
+    
+    //Data
+    private String inputMessage;
+    private Pixel pixelInicial;
+    private boolean[] canalesRGB;
     private String password;
+    private String stegoAlgorithm;
 
     public String getInputPath() {
         return inputPath;
@@ -39,20 +40,20 @@ public class Config {
         this.outputPath = outputPath;
     }
 
-    public boolean isEncryption() {
-        return encryption;
+    public boolean isEncrypted() {
+        return encrypted;
     }
 
-    public void setEncryption(boolean encryption) {
-        this.encryption = encryption;
+    public void setEncrypted(boolean encryption) {
+        this.encrypted = encryption;
     }
 
-    public boolean isCompression() {
-        return compression;
+    public boolean isCompressed() {
+        return compressed;
     }
 
-    public void setCompression(boolean compression) {
-        this.compression = compression;
+    public void setCompressed(boolean compression) {
+        this.compressed = compression;
     }
 
     public boolean isModo() {
@@ -111,4 +112,15 @@ public class Config {
         this.password = password;
     }
 
+    public String getStegoAlgorithm() {
+        return stegoAlgorithm;
+    }
+
+    public void setStegoAlgorithm(String stegoAlgorithm) {
+        this.stegoAlgorithm = stegoAlgorithm;
+    }
+
+    
+    
+    
 }

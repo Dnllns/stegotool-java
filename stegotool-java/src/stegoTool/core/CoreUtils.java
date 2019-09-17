@@ -1,4 +1,4 @@
-package stegoTool;
+package stegoTool.core;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import stegoTool.Config;
+import stegoTool.ImageEdit;
+import stegoTool.MainLauncher;
+import stegoTool.Pixel;
 
 /**
  *
@@ -110,7 +114,6 @@ public class CoreUtils {
             c.setInputPath(args[1]);                //input path
             c.setOutputPath(args[2]);               //output path
 
-            
             if (args[3].equals("-f")) {             //input message inside file
                 c.setInputMessageFilePath(args[4]); //input message file path
 
@@ -133,11 +136,11 @@ public class CoreUtils {
             c.setInputPath(args[1]);
             if (args[2].equals("-p")) {
                 c.setPassword(args[3]);
-                
+
                 if (args[4].equals("-f")) {
                     c.setOutputMessageFilePath(args[5]);
                 }
-                
+
             } else {
 
                 if (args[2].equals("-f")) {
@@ -184,8 +187,7 @@ public class CoreUtils {
         c.getImagen().guardarImagenPNG(conf.getOutputPath());
 
     }
-    
-    
+
     public static String binaryEncode(String string) {
         byte[] bytes = string.getBytes();
         StringBuilder bin = new StringBuilder();
@@ -197,5 +199,58 @@ public class CoreUtils {
             }
         }
         return bin.toString();
+
+        //V2
+//        String finalString = "";
+//        for (int i = 0; i < payload.length(); i++) {  
+//            int tempChar = (int) payload.charAt(i);
+//            finalString = finalString + Integer.toString(tempChar, 2);
+//        }
+//        return finalString;
+    }
+
+    /**
+     * @param bin
+     * @return
+     */
+    public static String binaryDecode(boolean[] bin) {
+
+        String stringExtraido = "";
+        String byyte = "";
+        int contadorBit = 0;
+        for (boolean bit : bin) {
+            if (bit) {
+                byyte = byyte + 0;
+            } else {
+                byyte = byyte + 1;
+            }
+            contadorBit++;
+            if (contadorBit == 8) {
+
+                stringExtraido = stringExtraido + (char) Integer.parseInt(byyte, 2);
+                byyte = "";
+                contadorBit = 0;
+
+            }
+
+        }
+        return stringExtraido;
+    }
+    
+        public static Pixel nextPixel(ImageEdit image, Pixel currentPixel, String algorithm) {
+
+        switch (algorithm) {
+
+            case "linear":
+                if ((currentPixel).getX() == image.getAncho() - 1) {
+                    currentPixel = image.getPixel(0, currentPixel.getY() + 1);
+                } else {
+                    currentPixel = image.getPixel(currentPixel.getX() + 1, currentPixel.getY());
+                }
+                break;
+
+        }
+        return currentPixel;
+
     }
 }
