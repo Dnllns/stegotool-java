@@ -1,4 +1,3 @@
-
 package stegoTool.core;
 
 import java.awt.Color;
@@ -18,6 +17,8 @@ public class LSB {
     String stegoAlgorithm;
     Pixel pixel;
     ImageEdit image;
+    private int binarySize;
+   
 
     //INSERT CONSTRUCTOR
     public LSB(boolean[] channels, String binaryData, String stegoAlgorithm, Pixel startPixel, ImageEdit image) {
@@ -29,26 +30,25 @@ public class LSB {
     }
 
     //EXTRACT CONSTRUCTOR
-
     public LSB(boolean[] channels, String stegoAlgorithm, Pixel pixel, ImageEdit image) {
         this.channels = channels;
         this.stegoAlgorithm = stegoAlgorithm;
         this.pixel = pixel;
         this.image = image;
+
     }
-    
-    
-    
-    
+
     public ImageEdit insert() {
         image.actualizarImagenRGB(generarPixeles());
         return image;
     }
-    
+
     /**
      * Extrae de la imagen el la carga insertada
+     * @param binarySize
+     * @return 
      */
-    private String extraerCarga(int binarySize) {
+    public String extract(int binarySize) {
 
         //INICIALIZAR VARIABLES
         int contadorBitActual = 0;              //Bit actual en la extraccion
@@ -113,21 +113,26 @@ public class LSB {
         String aux = Payload.binaryDecode(cargaBinariaExtraida);
         return aux.substring(0, aux.length() - 1);
     }
-    
-    
-    private String extractHeadder() {
+
+    public String extractHeadder() {
 
         //obtener la primera linea
-        boolean[] cargaBinariaExtraida = new boolean[image.getAncho()];
+        String binaryChar = "";
+        String cargaBinariaExtraida = "";
         int numCanal = 0;
         int contador = 0;
+        int bitCount = 0;
+        boolean completo = false;
 
-        while (currentPixel.getY() == 0) {
+        while (!completo) {
 
-            for (boolean canal : config.getCanalesRGB()) {
+            for (boolean canal : channels) {
 
                 if (contador == image.getAncho()) {
+                   
+                    completo = true;
                     break;
+                    
                 }
 
                 //Control de canal activo
@@ -135,23 +140,36 @@ public class LSB {
 
                     //Obtener el valor del canal RGB correspondiente
                     int[] valores = new int[3];
-                    valores[0] = currentPixel.getColor().getRed();
-                    valores[1] = currentPixel.getColor().getGreen();
-                    valores[2] = currentPixel.getColor().getBlue();
+                    valores[0] = pixel.getColor().getRed();
+                    valores[1] = pixel.getColor().getGreen();
+                    valores[2] = pixel.getColor().getBlue();
                     float valorGamaActual = valores[numCanal];
 
                     // Obtener la carga almacenada en el canal
                     // Si el valor de la gama es par, su carga sera true
-                    cargaBinariaExtraida[contador] = (valorGamaActual % 2 == 0);
+                    if(valorGamaActual % 2 == 0){
+                        binaryChar += "0";
+                    }else{
+                        binaryChar += "1";
+                    }
+                    bitCount++;
                     contador++;
                 }
                 numCanal++;
 
+                if (bitCount == 8){
+                
+                    /sdjflsdk
+                    
+                }
+                
                 if (numCanal == 3) {
                     numCanal = 0;
                 }
+                
+                
             }
-            nextPixel(config.getStegoAlgorithm());
+            CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
 
         }
 
@@ -167,10 +185,9 @@ public class LSB {
 
         }
 
-        return extraerCarga(headerSize);
+        return extract(headerSize);
 
     }
-
 
     /**
      * Genera los pixeles modificados que contienen carga
@@ -182,11 +199,14 @@ public class LSB {
         boolean primerPixel = true;                             //Control primera interaccion
         ArrayList<Pixel> pixelesMod = new ArrayList();          //Almacena los Pixeles modificados
 
-        //Obtener los trozos de Tamaño
-        ArrayList<boolean[]> trozosTam = CoreUtils.cortarEnTrozos(CoreUtils.countRGBChannels(channels), binaryData);
+        //Obtener los trozos 
+        ArrayList<boolean[]> splitedBinary = CoreUtils.cortarEnTrozos(
+                CoreUtils.countRGBChannels(channels), 
+                binaryData
+        );
 
-        //Obtener los pixeles de Tamaño
-        for (boolean[] cargaPixel : trozosTam) {
+        //Generar un pixel para cada trozo
+        for (boolean[] cargaPixel : splitedBinary) {
 
             //Si no es el primer pixel se actualiza la estructura con el valor del siguiente
             if (!primerPixel) {
@@ -279,9 +299,11 @@ public class LSB {
                 nuevoColor.get(1), //Green
                 nuevoColor.get(2) //Blue
         );
-        
-        
-        
+
+    }
+
+    public int getBinarySize() {
+        return binarySize;
     }
 
 }

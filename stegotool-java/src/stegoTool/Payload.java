@@ -50,4 +50,9 @@ public class Payload {
         carga = header.length() + ";" + header + carga;
     }
 
+    public String getCarga() {
+        return carga;
+    }
+
+    
 }

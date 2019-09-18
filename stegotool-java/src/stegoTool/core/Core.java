@@ -1,6 +1,5 @@
 package stegoTool.core;
 
-import java.util.ArrayList;
 import stegoTool.Config;
 import stegoTool.Header;
 import stegoTool.ImageEdit;
@@ -27,7 +26,7 @@ public class Core {
     private String payloadPassword;
 
     //Extra
-    private String extraccion;                               //Resultado de la extraccion
+    private String extraction;                               //Resultado de la extraccion
 
     public Core(Config taskConfig) {
 
@@ -73,7 +72,7 @@ public class Core {
      *
      * @return
      */
-    public int iniciarProcesado() {
+    public void iniciarProcesado() {
 
         //Comprobar en que modo va a funcionar la maquina
         if (config.isModo()) {
@@ -81,7 +80,7 @@ public class Core {
 
             LSB lsbEncoding = new LSB(
                     config.getCanalesRGB(), payload.binaryEncode(),
-                    config.getStegoAlgorithm(), config.getPixelInicial(), image
+                    config.getStegoAlgorithm(), currentPixel, image
             );
 
             //Insertar carga y guardar la imagen resultante
@@ -90,9 +89,18 @@ public class Core {
         } else {
             //Modo decoding
 
-            String rawEncryptedHeader = extractHeadder();
+            LSB lsbDecoding = new LSB(
+                    config.getCanalesRGB(), config.getStegoAlgorithm(), 
+                    currentPixel, image
+            );
+            
+            
+            
+            String rawEncryptedHeader = lsbDecoding.extractHeadder();
             header = new Header(rawEncryptedHeader, config.getPassword());
-            String rawPayload = extraerCarga(header.getBinarySize());
+            String rawPayload = lsbDecoding.extract(header.getBinarySize());
+            
+      
             Payload payload = new Payload(rawPayload);
 
             if (header.getEncryptionPassword() != null) {
@@ -102,9 +110,11 @@ public class Core {
             if (header.getCompressed() == 1) {
                 payload.decompress();
             }
+            
+            extraction = payload.getCarga();
 
         }
-        return 0;
+        
     }
 
     
@@ -115,7 +125,7 @@ public class Core {
     }
 
     public String getExtraccion() {
-        return extraccion;
+        return extraction;
     }
 
 }

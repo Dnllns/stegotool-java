@@ -2,8 +2,6 @@ package stegoTool;
 
 import stegoTool.core.Core;
 
-
-
 /**
  *
  * @author dnllns
@@ -15,7 +13,37 @@ public class MainLauncher {
      */
     public static void main(String[] args) {
 
-        
+        d();
+        //d();
+//        CoreUtils.printHeader();
+//        CoreUtils.parseArgs(args);
+    }
+
+    public static void e() {
+
+        Config c = new Config();
+        boolean canales[] = new boolean[3];
+        canales[0] = true;
+        canales[1] = true;
+        canales[2] = true;
+        c.setCanalesRGB(canales);
+        c.setModo(true);
+        c.setEncrypted(true);
+//        c.setCompression(true);
+        c.setInputPath("/home/dnllns/Escritorio/rojo.png");
+        c.setPixelInicial(new Pixel(0, 0));
+        c.setInputMessage("test");
+        c.setPassword("password");
+        c.setOutputPath("/home/dnllns/Escritorio/mod.png");
+        c.setStegoAlgorithm("linear");
+
+        Core core = new Core(c);
+        core.iniciarProcesado();
+
+    }
+
+    public static void d() {
+
         Config c = new Config();
         boolean canales[] = new boolean[3];
         canales[0] = true;
@@ -25,43 +53,13 @@ public class MainLauncher {
         c.setModo(false);
         c.setEncrypted(true);
         c.setCompressed(false);
-        c.setInputPath("C:\\Users\\Casa\\Desktop\\mod.png");
-        c.setPixelInicial(new Pixel(0,0));
-        c.setInputMessage("test");
+        c.setInputPath("/home/dnllns/Escritorio/mod.png");
+        c.setPixelInicial(new Pixel(0, 0));
         c.setPassword("password");
-        c.setOutputPath("C:\\Users\\Casa\\Desktop\\mod.png");
         c.setStegoAlgorithm("linear");
-        
+
         Core core = new Core(c);
         core.iniciarProcesado();
-        
-        
-//        CoreUtils.printHeader();
-//        CoreUtils.parseArgs(args);
-
-
-        
     }
 
-
 }
-
-        
-//        Config c = new Config();
-//        boolean canales[] = new boolean[3];
-//        canales[0] = true;
-//        canales[1] = true;
-//        canales[2] = true;
-//        c.setCanalesRGB(canales);
-//        c.setModo(true);
-//        c.setEncrypted(true);
-////        c.setCompression(true);
-//        c.setInputPath("C:\\Users\\Casa\\Desktop\\nacnic4.jpg");
-//        c.setPixelInicial(new Pixel(0,0));
-//        c.setInputMessage("test");
-//        c.setPassword("password");
-//        c.setOutputPath("C:\\Users\\Casa\\Desktop\\mod.png");
-//        c.setStegoAlgorithm("linear");
-//        
-//        Core core = new Core(c);
-//        core.iniciarProcesado();
