@@ -35,14 +35,14 @@ public class ImageEdit {
     public void actualizarImagenRGB(ArrayList<Pixel> pixelesMod) {
 
         //v1 Funcional
-        pixelesMod.forEach((pixel) -> {
+        for (Pixel p : pixelesMod) {
             //Modificamos el valor del objeto BufferedImage
             imagen.setRGB(
-                    pixel.getX(),
-                    pixel.getY(),
-                    pixel.getColor().getRGB() //Color en formato INT_ARGB
+                    p.getX(),
+                    p.getY(),
+                    p.getColor().getRGB() //Color en formato INT_ARGB
             );
-        });
+        }
 
     }
 

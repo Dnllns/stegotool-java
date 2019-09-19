@@ -18,7 +18,6 @@ public class LSB {
     Pixel pixel;
     ImageEdit image;
     private int binarySize;
-   
 
     //INSERT CONSTRUCTOR
     public LSB(boolean[] channels, String binaryData, String stegoAlgorithm, Pixel startPixel, ImageEdit image) {
@@ -39,14 +38,16 @@ public class LSB {
     }
 
     public ImageEdit insert() {
-        image.actualizarImagenRGB(generarPixeles());
+        ArrayList<Pixel> generarPixeles = generarPixeles();
+        image.actualizarImagenRGB(generarPixeles);
         return image;
     }
 
     /**
      * Extrae de la imagen el la carga insertada
+     *
      * @param binarySize
-     * @return 
+     * @return
      */
     public String extract(int binarySize) {
 
@@ -117,73 +118,55 @@ public class LSB {
     public String extractHeadder() {
 
         //obtener la primera linea
-        String binaryChar = "";
-        String cargaBinariaExtraida = "";
-        int numCanal = 0;
-        int contador = 0;
+        String rawByte = "";
+        String textBuffer = "";
+
+        int chCount = 0;
         int bitCount = 0;
-        boolean completo = false;
+        boolean done = false;
 
-        while (!completo) {
+        while (!done) {
 
-            for (boolean canal : channels) {
+            if (channels[chCount]) {
+                //Obtener el valor del canal RGB correspondiente            
+                int currentChVal = pixel.getRGB()[chCount];
 
-                if (contador == image.getAncho()) {
-                   
-                    completo = true;
-                    break;
-                    
+                // Obtener la carga almacenada en el canal
+                // Si el valor de la gama es par, su carga sera true
+                if (currentChVal % 2 == 0) {
+                    rawByte += "0";
+                } else {
+                    rawByte += "1";
                 }
 
-                //Control de canal activo
-                if (canal) {
+                bitCount++;
+                if (bitCount == 8) {
+                    bitCount = 0;
 
-                    //Obtener el valor del canal RGB correspondiente
-                    int[] valores = new int[3];
-                    valores[0] = pixel.getColor().getRed();
-                    valores[1] = pixel.getColor().getGreen();
-                    valores[2] = pixel.getColor().getBlue();
-                    float valorGamaActual = valores[numCanal];
+                    //CoreUtils.binaryDecode(ochoBits);
+                    int charCode = Integer.parseInt(rawByte, 2);
+                    String c = new Character((char) charCode).toString();
+                    rawByte = "";
 
-                    // Obtener la carga almacenada en el canal
-                    // Si el valor de la gama es par, su carga sera true
-                    if(valorGamaActual % 2 == 0){
-                        binaryChar += "0";
-                    }else{
-                        binaryChar += "1";
+                    if (c.equals(";")) {
+                        done = true;
+                        break;
+                    } else {
+                        textBuffer += c;   //Añadir el caracter al buffer
                     }
-                    bitCount++;
-                    contador++;
                 }
-                numCanal++;
-
-                if (bitCount == 8){
-                
-                    /sdjflsdk
-                    
-                }
-                
-                if (numCanal == 3) {
-                    numCanal = 0;
-                }
-                
-                
             }
-            CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
 
+            chCount++;
+            if (chCount == 3) {
+                chCount = 0;
+                CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
+
+            }
         }
 
-        //Obtener la fila x = 0 de la imagen y transformarla a caracteres
-        String x0CargaExtraida = Payload.binaryDecode(cargaBinariaExtraida);
-
-        //Obtener el tamaño de los headers
-        int headerSize = 0;
-
-        try {
-            headerSize = Integer.parseInt(x0CargaExtraida.substring(0, x0CargaExtraida.indexOf(";")));
-        } catch (Exception x) {
-
-        }
+        //Tamaño del header
+        int headerSize = Integer.parseInt(textBuffer);
 
         return extract(headerSize);
 
@@ -200,18 +183,18 @@ public class LSB {
         ArrayList<Pixel> pixelesMod = new ArrayList();          //Almacena los Pixeles modificados
 
         //Obtener los trozos 
-        ArrayList<boolean[]> splitedBinary = CoreUtils.cortarEnTrozos(
-                CoreUtils.countRGBChannels(channels), 
+        ArrayList<String> splitedBinary = CoreUtils.cortarEnTrozos(
+                CoreUtils.countRGBChannels(channels),
                 binaryData
         );
 
         //Generar un pixel para cada trozo
-        for (boolean[] cargaPixel : splitedBinary) {
+        for (String cargaPixel : splitedBinary) {
 
             //Si no es el primer pixel se actualiza la estructura con el valor del siguiente
             if (!primerPixel) {
                 //obtener pixel siguiente
-                CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
+                pixel = CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
 
             } else {
                 primerPixel = false;
@@ -232,6 +215,10 @@ public class LSB {
     }
 
     /**
+     *
+     * IMPORTANTE trozo carga debe de tener el mismotamaño que el numero de
+     * canales activos
+     *
      * Recibe un color, un array booleano que representa N bits, y un array con
      * los canales RGB usados. Devuelve un nuevo color equivalente a el color
      * modificado en funcion del array de bits
@@ -240,64 +227,52 @@ public class LSB {
      * @param trozoCarga el array con la carga neta del pixel
      * @return el nuevo color
      */
-    public Color procesadoRgbDeParidad(Color color, boolean[] trozoCarga) {
+    public Color procesadoRgbDeParidad(Color color, String trozoCarga) {
 
-        ArrayList<Integer> nuevoColor = new ArrayList();        //Variable para almacenar el nuevo color
-        int canalRgbAcual = 0;                                  //Variable de control de la gama RGBA (0=Red, 1=Green, 2=Blue)
+        int[] nuevoColor = new int[3];       //Variable para almacenar el nuevo color
         int valorCanal;                                         //Variable que almacena el valor de la gama RGB que se esta usando
-        int numBit = 0;                                         //Controla el bit actual de la carga
 
         //----------------------- PROCESADO DEL COLOR SEGUN EL TROZO --------------
         //----|--
         //----v--
         //Se aplica un redondeo al valor original del canal en función del valor
         //que le toca a ese canal del array de trozoCarga
-        for (Boolean canal : channels) {
+        for (int i = 0; i < CoreUtils.countRGBChannels(channels); i++) {
 
             //Obtenemos el valor del canal actual
-            int[] valores = new int[3];
-            valores[0] = color.getRed();
-            valores[1] = color.getGreen();
-            valores[2] = color.getBlue();
-
-            valorCanal = valores[canalRgbAcual];
+            valorCanal = Pixel.getRGB(color)[i];
 
             //Control del canal activo
-            if (canal) {
+            if (channels[i]) {
 
-                if (trozoCarga[numBit]) {       //PAR
-
+                //Modificacion del valor del canal
+                //Se aplica un redondeo al valor para insertar la carga
+                if (trozoCarga.charAt(i) == '0') {       //PAR
                     if (valorCanal == 255) {
-
                         //Redondeo hacia abajo
                         if (valorCanal % 2 != 0) {
                             valorCanal--;
                         }
-                    } else {
-
-                        //Redondeo hacia arriba
+                    } else {     //Redondeo hacia arriba
                         if (valorCanal % 2 != 0) {
                             valorCanal++;
                         }
                     }
                 } else {                        //IMPAR
-
                     if (valorCanal % 2 == 0) {
                         valorCanal++;
                     }
                 }
-                numBit++;
             }
 
-            //Añadir valor de canal modificadp
-            nuevoColor.add(valorCanal);
-            canalRgbAcual++;   //Se incrementa la variable de canal RGB
+            //Añadir valor del canal
+            nuevoColor[i] = valorCanal;
         }
         //Devolver nuevo color generado
         return new Color(
-                nuevoColor.get(0), //Red
-                nuevoColor.get(1), //Green
-                nuevoColor.get(2) //Blue
+                nuevoColor[0], //Red
+                nuevoColor[1], //Green
+                nuevoColor[2] //Blue
         );
 
     }

@@ -41,14 +41,14 @@ public class CoreUtils {
      * Obtiene la carga y la va agrupando en arrays de N en N para facilitar su
      * manipulacion
      *
-     * @param numero el numero de unidades por array
+     * @param tamTrozo el numero de unidades por array
      * @param carga la carga binaria
      * @return
      */
-    public static ArrayList<boolean[]> cortarEnTrozos(int numero, String carga) {
+    public static ArrayList<String> cortarEnTrozos(int tamTrozo, String carga) {
 
-        boolean[] bits = new boolean[numero];                       //Array que contiene (n) bits
-        ArrayList<boolean[]> cargaTroceada = new ArrayList();       //Contiene los arrays agrupados
+        String bits = "";                       //Array que contiene (n) bits
+        ArrayList<String> cargaTroceada = new ArrayList();       //Contiene los arrays agrupados
 
         int currentChar = 0;                                        //Posicion del caracter actual del bucle
         int contadorBit = 0;                                        //Controlar la posicion del array de bits
@@ -58,16 +58,16 @@ public class CoreUtils {
 
             //Si el caracter = 0 --> True
             //Si el caracter = 1 --> False
-            bits[contadorBit] = Integer.parseInt(String.valueOf(carga.charAt(currentChar))) == 0;
-
+            bits += carga.charAt(currentChar);
+            
             //Incrementar contadores
             currentChar++;
             contadorBit++;
 
             //Controlar numero de elementos por array
-            if (contadorBit == numero) {
+            if (contadorBit == tamTrozo) {
                 cargaTroceada.add(bits);
-                bits = new boolean[numero];
+                bits = "";
                 contadorBit = 0;
             }
         }
@@ -236,8 +236,25 @@ public class CoreUtils {
         }
         return stringExtraido;
     }
-    
-        public static Pixel nextPixel(ImageEdit image, Pixel currentPixel, String algorithm) {
+
+    public static String binaryDecode(String input) {
+
+        if (input.length() % 8 != 0) {
+            throw new IllegalArgumentException("input must be a multiple of 8");
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < input.length(); i += 8) {
+            int charCode = Integer.parseInt(input.substring(i, i + 8), 2);
+            result.append((char) charCode);
+        }
+
+        return result.toString();
+
+    }
+
+    public static Pixel nextPixel(ImageEdit image, Pixel currentPixel, String algorithm) {
 
         switch (algorithm) {
 

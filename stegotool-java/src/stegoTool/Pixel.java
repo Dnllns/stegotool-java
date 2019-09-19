@@ -29,8 +29,6 @@ public class Pixel {
         this.x = x;
         this.y = y;
     }
-    
-    
 
     /**
      * ------------------------- SETTERS ---------------------------------------
@@ -84,5 +82,27 @@ public class Pixel {
      */
     public int getY() {
         return y;
+    }
+
+    public int[] getRGB() {
+
+        int[] valores = new int[3];
+        valores[0] = color.getRed();
+        valores[1] = color.getGreen();
+        valores[2] = color.getBlue();
+        
+        return valores;
+
+    }
+    
+    public static int[] getRGB(Color color) {
+
+        int[] valores = new int[3];
+        valores[0] = color.getRed();
+        valores[1] = color.getGreen();
+        valores[2] = color.getBlue();
+        
+        return valores;
+
     }
 }
