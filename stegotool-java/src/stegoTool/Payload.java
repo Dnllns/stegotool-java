@@ -12,6 +12,7 @@ import stegoTool.encryption.AES;
 public class Payload {
 
     private String carga;         //Carga en texto plano
+    
 
     /**
      * Constructor

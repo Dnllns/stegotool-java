@@ -92,13 +92,7 @@ public class LSB {
                 //Control de canal activo
                 if (canal) {
 
-                    //Obtener el valor del canal RGB correspondiente
-                    //Obtenemos el valor del canal actual
-                    int[] valores = new int[3];
-                    valores[0] = pixel.getColor().getRed();
-                    valores[1] = pixel.getColor().getGreen();
-                    valores[2] = pixel.getColor().getBlue();
-                    float valorGamaActual = valores[numCanal];
+                    float valorGamaActual = pixel.getRGB()[numCanal];
 
                     //Obtener carga
                     //Si el valor de la gama es par, su carga sera true
@@ -144,8 +138,7 @@ public class LSB {
                     bitCount = 0;
 
                     //CoreUtils.binaryDecode(ochoBits);
-                    int charCode = Integer.parseInt(rawByte, 2);
-                    String c = new Character((char) charCode).toString();
+                    String c = new Character((char) Integer.parseInt(rawByte, 2)).toString();
                     rawByte = "";
 
                     if (c.equals(";")) {
@@ -160,7 +153,7 @@ public class LSB {
             chCount++;
             if (chCount == 3) {
                 chCount = 0;
-                CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
+                pixel = CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
 
             }
         }
@@ -169,6 +162,75 @@ public class LSB {
         int headerSize = Integer.parseInt(textBuffer);
 
         return extract(headerSize);
+
+    }
+
+    public char lsbChar() {
+
+        //obtener la primera linea
+        String rawByte = "";
+        String textBuffer = "";
+
+        int chCount = 0;
+        int bitCount = 0;
+        boolean done = false;
+
+        while (bitCount < 8) {
+            //Obtener el valor del canal RGB correspondiente            
+            int currentChVal = pixel.getRGB()[chCount];
+
+            if (channels[chCount]) {
+
+                // Obtener la carga almacenada en el canal
+                // Si el valor de la gama es par, su carga sera true
+                if (currentChVal % 2 == 0) {
+                    rawByte += "0";
+                } else {
+                    rawByte += "1";
+                }
+
+            }
+            chCount++;
+            if (chCount == 3) {
+                chCount = 0;
+                pixel = CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
+
+            }
+
+        }
+
+        if (channels[chCount]) {
+            //Obtener el valor del canal RGB correspondiente            
+            int currentChVal = pixel.getRGB()[chCount];
+
+            // Obtener la carga almacenada en el canal
+            // Si el valor de la gama es par, su carga sera true
+            if (currentChVal % 2 == 0) {
+                rawByte += "0";
+            } else {
+                rawByte += "1";
+            }
+
+            bitCount++;
+            if (bitCount == 8) {
+                bitCount = 0;
+
+                //CoreUtils.binaryDecode(ochoBits);
+                int charCode = Integer.parseInt(rawByte, 2);
+                String c = new Character((char) charCode).toString();
+                rawByte = "";
+
+                textBuffer += c;   //Añadir el caracter al buffer
+
+            }
+        }
+
+        chCount++;
+        if (chCount == 3) {
+            chCount = 0;
+            pixel = CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
+
+        }
 
     }
 

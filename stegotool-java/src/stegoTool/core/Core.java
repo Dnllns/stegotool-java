@@ -5,6 +5,7 @@ import stegoTool.Header;
 import stegoTool.ImageEdit;
 import stegoTool.Payload;
 import stegoTool.Pixel;
+import stegoTool.encryption.AES;
 import stegoTool.encryption.Md5;
 
 /**
@@ -59,9 +60,12 @@ public class Core {
                     config.getPassword(),
                     config.isCompressed(),
                     config.getStegoAlgorithm()
-            );
-
+            );       
+            
+            
             payload.encapsulate(header.makeHeader());
+            
+
 
         }
     }

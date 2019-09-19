@@ -57,7 +57,7 @@ public class Header {
                 + stegoAlgorithm;
 
         //Encrypted header with usser password
-        return AES.encrypt(headerPassword, rawHeader);
+        return AES.encrypt(rawHeader, headerPassword);
 
     }
 
