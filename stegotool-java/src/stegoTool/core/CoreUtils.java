@@ -59,7 +59,7 @@ public class CoreUtils {
             //Si el caracter = 0 --> True
             //Si el caracter = 1 --> False
             bits += carga.charAt(currentChar);
-            
+
             //Incrementar contadores
             currentChar++;
             contadorBit++;
@@ -270,4 +270,25 @@ public class CoreUtils {
         return currentPixel;
 
     }
+
+    public static int getStartChanel(boolean[] channels) {
+
+        int start = 0;
+
+        boolean c;
+        for (int i = 0; i < channels.length; i++) {
+
+            c = channels[i];
+
+            if (!c) {
+                start++;
+            } else {
+                break;
+            }
+
+        }
+        return start;
+
+    }
+
 }

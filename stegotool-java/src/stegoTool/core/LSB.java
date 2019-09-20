@@ -16,6 +16,7 @@ public class LSB {
     String binaryData;
     String stegoAlgorithm;
     Pixel pixel;
+    int currentChannel;
     ImageEdit image;
     private int binarySize;
 
@@ -54,15 +55,14 @@ public class LSB {
         //INICIALIZAR VARIABLES
         int contadorBitActual = 0;              //Bit actual en la extraccion
         boolean primeraInteraccion = true;      //Control de primera interaccion del bucle
-        boolean[] cargaBinariaExtraida;         //Carga binaria extraida
+        String cargaBinariaExtraida = "";            //Carga binaria extraida
         boolean procesoCompletado = false;      //Control de fin de procesado
+        int payloadSize = CoreUtils.binaryEncode(binarySize + ";").length() + binarySize;
 
         //Obtener el numero de canales usados
         int numeroCanalesUsados = CoreUtils.countRGBChannels(channels);
 
         //-----------------------EXTRACCION DE LA CARGA --------------
-        cargaBinariaExtraida = new boolean[binarySize];
-
         //Bucle que recorre todos los pixeles implicados
         while (!procesoCompletado) {
 
@@ -84,7 +84,7 @@ public class LSB {
             for (boolean canal : channels) {
 
                 //Control de ultimo bit de carga alcanzado
-                if (contadorBitActual == binarySize) {
+                if (contadorBitActual == payloadSize) {
                     procesoCompletado = true;
                     break;
                 }
@@ -92,11 +92,16 @@ public class LSB {
                 //Control de canal activo
                 if (canal) {
 
-                    float valorGamaActual = pixel.getRGB()[numCanal];
+                    int valorGamaActual = pixel.getRGB()[numCanal];
 
                     //Obtener carga
                     //Si el valor de la gama es par, su carga sera true
-                    cargaBinariaExtraida[contadorBitActual] = valorGamaActual % 2 == 0;
+                    if (valorGamaActual % 2 == 0) {
+                        cargaBinariaExtraida += "0";
+
+                    } else {
+                        cargaBinariaExtraida += "1";
+                    }
                     contadorBitActual++;
                 }
 
@@ -105,7 +110,7 @@ public class LSB {
         }
 
         //Transformar de binario a caracteres
-        String aux = Payload.binaryDecode(cargaBinariaExtraida);
+        String aux = CoreUtils.binaryDecode(cargaBinariaExtraida);
         return aux.substring(0, aux.length() - 1);
     }
 
@@ -114,12 +119,15 @@ public class LSB {
         //obtener la primera linea
         String rawByte = "";
         String textBuffer = "";
+        int headerSize = 0;
 
         int chCount = 0;
         int bitCount = 0;
-        boolean done = false;
+        boolean headerSizeDone = false;
+        boolean headerDone = false;
+        int headerCount = 0;
 
-        while (!done) {
+        while (!headerSizeDone) {
 
             if (channels[chCount]) {
                 //Obtener el valor del canal RGB correspondiente            
@@ -142,8 +150,8 @@ public class LSB {
                     rawByte = "";
 
                     if (c.equals(";")) {
-                        done = true;
-                        break;
+                        headerSize = Integer.parseInt(textBuffer);
+                        headerSizeDone = true;
                     } else {
                         textBuffer += c;   //Añadir el caracter al buffer
                     }
@@ -156,16 +164,15 @@ public class LSB {
                 pixel = CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
 
             }
+
         }
 
         //Tamaño del header
-        int headerSize = Integer.parseInt(textBuffer);
-
         return extract(headerSize);
 
     }
 
-    public char lsbChar() {
+    public void lsb3(int ochoPixeles) {
 
         //obtener la primera linea
         String rawByte = "";
@@ -213,7 +220,6 @@ public class LSB {
 
             bitCount++;
             if (bitCount == 8) {
-                bitCount = 0;
 
                 //CoreUtils.binaryDecode(ochoBits);
                 int charCode = Integer.parseInt(rawByte, 2);

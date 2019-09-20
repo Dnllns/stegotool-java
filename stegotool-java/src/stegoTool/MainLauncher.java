@@ -31,11 +31,11 @@ public class MainLauncher {
         c.setModo(true);
         c.setEncrypted(true);
 //        c.setCompression(true);
-        c.setInputPath("C:\\Users\\Casa\\Desktop\\p.png");
+        c.setInputPath("/home/dnllns/Escritorio/rojo.png");
         c.setPixelInicial(new Pixel(0, 0));
         c.setInputMessage("test");
         c.setPassword("password");
-        c.setOutputPath("C:\\Users\\Casa\\Desktop\\out.png");
+        c.setOutputPath("/home/dnllns/Escritorio/mod.png");
         c.setStegoAlgorithm("linear");
 
         Core core = new Core(c);
@@ -54,7 +54,7 @@ public class MainLauncher {
         c.setModo(false);
         c.setEncrypted(true);
         c.setCompressed(false);
-        c.setInputPath("C:\\Users\\Casa\\Desktop\\out.png");
+        c.setInputPath("/home/dnllns/Escritorio/mod.png");
         c.setPixelInicial(new Pixel(0, 0));
         c.setPassword("password");
         c.setStegoAlgorithm("linear");
