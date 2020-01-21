@@ -3,7 +3,6 @@ package stegoTool.core;
 import java.awt.Color;
 import java.util.ArrayList;
 import stegoTool.ImageEdit;
-import stegoTool.Payload;
 import stegoTool.Pixel;
 
 /**
@@ -38,11 +37,22 @@ public class LSB {
 
     }
 
-    public ImageEdit insert() {
+    public void insert() {
         ArrayList<Pixel> generarPixeles = generarPixeles();
         image.actualizarImagenRGB(generarPixeles);
-        return image;
     }
+
+    
+
+    
+    // /** 
+    //  *  Gen color & update at the same time
+    //  *  Not suported on 'MovingPixel' algorithm methods (Maybe si se piensa)
+    //  */
+    // public void insert() {
+    //     updatePixels();
+    // }
+
 
     /**
      * Extrae de la imagen el la carga insertada
@@ -252,8 +262,8 @@ public class LSB {
 
         //Obtener los trozos 
         ArrayList<String> splitedBinary = CoreUtils.cortarEnTrozos(
-                CoreUtils.countRGBChannels(channels),
-                binaryData
+            CoreUtils.countRGBChannels(channels),
+            binaryData
         );
 
         //Generar un pixel para cada trozo
@@ -282,6 +292,46 @@ public class LSB {
 
     }
 
+
+    private void updatePixels(){
+
+        boolean primerPixel = true;                             //Control primera interaccion
+
+        //Obtener los trozos 
+        ArrayList<String> splitedBinary = CoreUtils.cortarEnTrozos(
+            CoreUtils.countRGBChannels(channels),
+            binaryData
+        );
+
+        //Generar un pixel para cada trozo
+        for (String cargaPixel : splitedBinary) {
+
+            //Si no es el primer pixel se actualiza la estructura con el valor del siguiente
+            if (!primerPixel) {
+                //obtener pixel siguiente
+                pixel = CoreUtils.nextPixel(image, pixel, stegoAlgorithm);
+
+            } else {
+                primerPixel = false;
+            }
+
+            //Gen new color
+            Color nuevoColor = procesadoRgbDeParidad(
+                pixel.getColor(), //Color original del Pixel
+                cargaPixel
+            );
+
+            //Mod updatedPixel on BufferedImage
+            image.getImage().setRGB(
+                pixel.getX(),
+                pixel.getY(),
+                nuevoColor.getRGB() //Color en formato INT_ARGB
+            );
+
+        }
+
+
+    }
     /**
      *
      * IMPORTANTE trozo carga debe de tener el mismotamaño que el numero de
@@ -348,5 +398,11 @@ public class LSB {
     public int getBinarySize() {
         return binarySize;
     }
+
+
+    public ImageEdit getImage() {
+        return image;
+    }
+
 
 }

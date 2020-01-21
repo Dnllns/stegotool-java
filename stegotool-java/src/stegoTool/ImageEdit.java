@@ -69,6 +69,11 @@ public class ImageEdit {
         return imagen.getHeight();
     }
 
+
+    public BufferedImage getImage(){
+        return imagen;
+    }
+
     /**
      * Guarda la imagen con el nombre pasado por parametro
      *

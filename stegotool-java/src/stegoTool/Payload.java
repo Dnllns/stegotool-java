@@ -11,20 +11,20 @@ import stegoTool.encryption.AES;
  */
 public class Payload {
 
-    private String carga;         //Carga en texto plano
+    private String payload;         //payload en texto plano
     
 
     /**
      * Constructor
      *
-     * @param contenidoOriginal
+     * @param data
      */
-    public Payload(String contenidoOriginal) {
-        carga = contenidoOriginal + " ";
+    public Payload(String data) {
+        payload = data + " ";
     }
 
     public String binaryEncode() {
-        return CoreUtils.binaryEncode(carga);
+        return CoreUtils.binaryEncode(payload);
     }
 
     public static String binaryDecode(boolean[] bin) {
@@ -32,27 +32,27 @@ public class Payload {
     }
 
     public void compress() {
-        carga = Base64.getEncoder().encodeToString(GZIPCompression.compress(carga));
+        payload = Base64.getEncoder().encodeToString(GZIPCompression.compress(payload));
     }
 
     public void decompress() {
-        carga = GZIPCompression.decompress(Base64.getDecoder().decode(carga));
+        payload = GZIPCompression.decompress(Base64.getDecoder().decode(payload));
     }
 
     public void encrypt(String password) {
-        carga = AES.encrypt(carga, password);
+        payload = AES.encrypt(payload, password);
     }
 
     public void decrypt(String password) {
-        carga = AES.decrypt(carga, password);
+        payload = AES.decrypt(payload, password);
     }
 
     public void encapsulate(String header) {
-        carga = header.length() + ";" + header + carga;
+        payload = header.length() + ";" + header + payload;
     }
 
-    public String getCarga() {
-        return carga;
+    public String getPayload() {
+        return payload;
     }
 
     

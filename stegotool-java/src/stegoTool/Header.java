@@ -1,42 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package stegoTool;
 
 import stegoTool.encryption.AES;
 
 public class Header {
 
-    private int binarySize;
-    private String rawDataMD5;
-    private String encryptionPassword;
-    private String headerPassword;
-    private int compressed;
-    private String stegoAlgorithm;
+    //Encoding data
+    private int payloadBinarySize;      //Payload binary size
+    private String payloadMD5;          //MD5 hash of payload
+    private String encryptionPassword;  //Pasword for encrypt raw header (Must be random generation)
+    private int compressed;             //Encrypted-header 'is compresed' flag
+    private String stegoAlgorithm;      //Used steganography algorithm
+    //Decoding data
+    private String encryptedHeader;     //Encrypted-header
+    //Comomn data
+    private String headerPassword;      //Pasword for decrypt encrypted-header
 
-    public Header(String rawEncryptedHeader, String password) {
 
-        String decrypted = AES.decrypt(rawEncryptedHeader, password);
-        String[] parts = decrypted.split(";");
-        encryptionPassword = parts[0];
-        rawDataMD5 = parts[1];
-        binarySize = Integer.parseInt(parts[2]);
-        compressed = Integer.parseInt(parts[3]);
-        stegoAlgorithm = parts[4];
+    /**
+     * Constructor for decoding action
+     * @param encryptedHeader, Raw string encrypted-header
+     * @param headerPassword, Password for decrypt encrypted-header
+     */    
+    public Header(final String rawEncryptedHeader, final String headerPassword) {
+        this.encryptedHeader = rawEncryptedHeader;
+        this.headerPassword = headerPassword;       
     }
 
+    /**
+     * Constructor for encoding action
+     * @param payloadBinarySize 
+     * @param payloadMD5
+     * @param encryptionPassword
+     * @param headerPassword
+     * @param compressed
+     * @param stegoAlgorithm
+     */
     public Header(
-            int binarySize,
-            String rawDataMD5,
-            String encryptionPassword,
-            String headerPassword,
-            boolean compressed,
-            String stegoAlgorithm
+            final int payloadBinarySize,
+            final String payloadMD5,
+            final String encryptionPassword,
+            final String headerPassword,
+            final boolean compressed,
+            final String stegoAlgorithm
     ) {
-        this.binarySize = binarySize;
-        this.rawDataMD5 = rawDataMD5;
+        this.payloadBinarySize = payloadBinarySize;
+        this.payloadMD5 = payloadMD5;
         this.encryptionPassword = encryptionPassword;
         this.headerPassword = headerPassword;
         this.stegoAlgorithm = stegoAlgorithm;
@@ -48,11 +56,12 @@ public class Header {
 
     }
 
-    public String makeHeader() {
 
-        String rawHeader = encryptionPassword + ";"
-                + rawDataMD5 + ";"
-                + binarySize + ";"
+    public String make() {
+
+        final String rawHeader = encryptionPassword + ";"
+                + payloadMD5 + ";"
+                + payloadBinarySize + ";"
                 + compressed + ";"
                 + stegoAlgorithm;
 
@@ -61,27 +70,47 @@ public class Header {
 
     }
 
+
+
+
+    /**
+     * Decrypt encrypted header and load data into structures
+     */
+    private void decrypt(){
+
+        final String decrypted = AES.decrypt(encryptedHeader, headerPassword);
+        final String[] parts = decrypted.split(";");
+        encryptionPassword = parts[0];
+        payloadMD5 = parts[1];
+        payloadBinarySize = Integer.parseInt(parts[2]);
+        compressed = Integer.parseInt(parts[3]);
+        stegoAlgorithm = parts[4];
+    }
+
+
+    //Getter & Setter methods
+
     public String getEncryptionPassword() {
         return encryptionPassword;
     }
 
-    public int getBinarySize() {
-        return binarySize;
+    public int getRawDataBinarySize() {
+        return payloadBinarySize;
     }
 
     public String getRawDataMD5() {
-        return rawDataMD5;
+        return payloadMD5;
     }
 
-    public void setRawDataMD5(String rawDataMD5) {
-        this.rawDataMD5 = rawDataMD5;
+    public void setRawDataMD5(final String payloadMD5) {
+        this.payloadMD5 = payloadMD5;
     }
 
     public String getHeaderPassword() {
         return headerPassword;
     }
 
-    public void setHeaderPassword(String headerPassword) {
+    public void setHeaderPassword(final String headerPassword) {
         this.headerPassword = headerPassword;
     }
 
@@ -89,7 +118,7 @@ public class Header {
         return compressed;
     }
 
-    public void setCompressed(int compressed) {
+    public void setCompressed(final int compressed) {
         this.compressed = compressed;
     }
 
@@ -97,7 +126,7 @@ public class Header {
         return stegoAlgorithm;
     }
 
-    public void setStegoAlgorithm(String stegoAlgorithm) {
+    public void setStegoAlgorithm(final String stegoAlgorithm) {
         this.stegoAlgorithm = stegoAlgorithm;
     }
     
