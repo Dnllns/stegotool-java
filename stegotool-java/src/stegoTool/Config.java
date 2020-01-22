@@ -3,6 +3,7 @@ package stegoTool;
 /**
  *
  * @author dnllns
+ * @version 1.0 
  */
 public class Config {
 
@@ -23,6 +24,8 @@ public class Config {
     private boolean[] canalesRGB;
     private String password;
     private String stegoAlgorithm;
+
+    // region  Getter & Setter
 
     public String getInputPath() {
         return inputPath;
@@ -120,7 +123,7 @@ public class Config {
         this.stegoAlgorithm = stegoAlgorithm;
     }
 
-    
+    // endregion
     
     
 }

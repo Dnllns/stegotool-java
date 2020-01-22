@@ -4,31 +4,31 @@ import stegoTool.encryption.AES;
 
 public class Header {
 
-    //Encoding data
-    private int payloadBinarySize;      //Payload binary size
-    private String payloadMD5;          //MD5 hash of payload
-    private String encryptionPassword;  //Pasword for encrypt raw header (Must be random generation)
-    private int compressed;             //Encrypted-header 'is compresed' flag
-    private String stegoAlgorithm;      //Used steganography algorithm
-    //Decoding data
-    private String encryptedHeader;     //Encrypted-header
-    //Comomn data
-    private String headerPassword;      //Pasword for decrypt encrypted-header
+    private int payloadBinarySize;      // Payload binary size
+    private String payloadMD5;          // MD5 hash of payload
+    private String encryptionPassword;  // Pasword for encrypt raw header (Must be random generation)
+    private int compressed;             // Encrypted-header 'is compresed' flag
+    private String stegoAlgorithm;      // Used steganography algorithm
+    private String encryptedHeader;     // Encrypted-header    
+    private String headerPassword;      // Pasword for decrypt encrypted-header
 
+    // region Constructor
 
     /**
      * Constructor for decoding action
+     * 
      * @param encryptedHeader, Raw string encrypted-header
-     * @param headerPassword, Password for decrypt encrypted-header
-     */    
+     * @param headerPassword,  Password for decrypt encrypted-header
+     */
     public Header(final String rawEncryptedHeader, final String headerPassword) {
         this.encryptedHeader = rawEncryptedHeader;
-        this.headerPassword = headerPassword;       
+        this.headerPassword = headerPassword;
     }
 
     /**
      * Constructor for encoding action
-     * @param payloadBinarySize 
+     * 
+     * @param payloadBinarySize
      * @param payloadMD5
      * @param encryptionPassword
      * @param headerPassword
@@ -36,12 +36,8 @@ public class Header {
      * @param stegoAlgorithm
      */
     public Header(
-            final int payloadBinarySize,
-            final String payloadMD5,
-            final String encryptionPassword,
-            final String headerPassword,
-            final boolean compressed,
-            final String stegoAlgorithm
+        final int payloadBinarySize, final String payloadMD5, final String encryptionPassword,
+        final String headerPassword, final boolean compressed, final String stegoAlgorithm
     ) {
         this.payloadBinarySize = payloadBinarySize;
         this.payloadMD5 = payloadMD5;
@@ -53,30 +49,26 @@ public class Header {
         } else {
             this.compressed = 0;
         }
-
     }
 
+    // endregion
 
+    // region Methods
+
+    /**
+     * Generate the header
+     */
     public String make() {
-
-        final String rawHeader = encryptionPassword + ";"
-                + payloadMD5 + ";"
-                + payloadBinarySize + ";"
-                + compressed + ";"
-                + stegoAlgorithm;
-
-        //Encrypted header with usser password
+        //Gen header string
+        final String rawHeader =   encryptionPassword + ";" + payloadMD5 + ";" + payloadBinarySize + ";" + compressed + ";" + stegoAlgorithm;
+        // Encrypted header with password
         return AES.encrypt(rawHeader, headerPassword);
-
     }
-
-
-
 
     /**
      * Decrypt encrypted header and load data into structures
      */
-    private void decrypt(){
+    public void decrypt() {
 
         final String decrypted = AES.decrypt(encryptedHeader, headerPassword);
         final String[] parts = decrypted.split(";");
@@ -87,8 +79,9 @@ public class Header {
         stegoAlgorithm = parts[4];
     }
 
+    // endregion
 
-    //Getter & Setter methods
+    // region Getter & Setter
 
     public String getEncryptionPassword() {
         return encryptionPassword;
@@ -129,7 +122,9 @@ public class Header {
     public void setStegoAlgorithm(final String stegoAlgorithm) {
         this.stegoAlgorithm = stegoAlgorithm;
     }
-    
+
+    // endregion
+
     
 
 }
