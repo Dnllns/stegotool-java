@@ -8,6 +8,7 @@
  * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
  * @since early 2020 
  * @see Source available on https://github.com/Dnllns/stegotool-java 
+ * 
  */
 
 package stegoTool;
@@ -24,9 +25,7 @@ public class Header {
     private String encryptedHeader;     // Encrypted-header    
     private String headerPassword;      // Pasword for decrypt encrypted-header
 
-    //------------------------------------------------------------------------
-
-    // region Constructor
+    // region Constructor --------------------------------------------------------------------
 
     /**
      * Constructor for decoding action
@@ -67,9 +66,7 @@ public class Header {
 
     // endregion
 
-    //------------------------------------------------------------------------
-
-    // region Methods
+    // region Methods ------------------------------------------------------------------------
 
     /**
      * Generate the header
@@ -97,9 +94,7 @@ public class Header {
 
     // endregion
 
-    //------------------------------------------------------------------------
-
-    // region Getter & Setter
+    // region Getter & Setter ----------------------------------------------------------------
 
     public String getEncryptionPassword() {
         return encryptionPassword;
