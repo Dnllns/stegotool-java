@@ -8,6 +8,8 @@
  * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
  * @since early 2020 
  * @see Source available on https://github.com/Dnllns/stegotool-java 
+ * @see Based on Estegomaquina-Android, https://github.com/Dnllns/EstegoMaquina-Android
+ *
  */
 
 package stegoTool;

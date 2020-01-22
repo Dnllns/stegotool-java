@@ -1,9 +1,19 @@
+/**
+ *  __  _____  ____  __    ___  _____  ___   ___   _    
+ * ( (`  | |  | |_  / /`_ / / \  | |  / / \ / / \ | |   
+ * _)_)  |_|  |_|__ \_\_/ \_\_/  |_|  \_\_/ \_\_/ |_|__  
+ * ---------------------------------------------------- 
+ * 
+ * @author dnllns
+ * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
+ * @since early 2020 
+ * @see Source available on https://github.com/Dnllns/stegotool-java 
+ * @see Based on Estegomaquina-Android, https://github.com/Dnllns/EstegoMaquina-Android
+ *
+ */
+
 package stegoTool.fileUtils;
 
-/**
- *
- * @author dnllns
- */
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
