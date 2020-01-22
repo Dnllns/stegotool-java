@@ -1,18 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *  __  _____  ____  __    ___  _____  ___   ___   _    
+ * ( (`  | |  | |_  / /`_ / / \  | |  / / \ / / \ | |   
+ * _)_)  |_|  |_|__ \_\_/ \_\_/  |_|  \_\_/ \_\_/ |_|__  
+ * ---------------------------------------------------- 
+ * 
+ * @author dnllns
+ * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
+ * @since early 2020 
+ * @see Source available on https://github.com/Dnllns/stegotool-java 
  */
+
 package stegoTool.encryption;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- *
- * @author Casa
- */
 public class Md5 {
 
     public static String getMD5(String input) {

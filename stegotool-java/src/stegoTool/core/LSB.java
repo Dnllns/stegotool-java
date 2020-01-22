@@ -1,3 +1,15 @@
+/**
+ *  __  _____  ____  __    ___  _____  ___   ___   _    
+ * ( (`  | |  | |_  / /`_ / / \  | |  / / \ / / \ | |   
+ * _)_)  |_|  |_|__ \_\_/ \_\_/  |_|  \_\_/ \_\_/ |_|__  
+ * ---------------------------------------------------- 
+ * 
+ * @author dnllns
+ * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
+ * @since early 2020 
+ * @see Source available on https://github.com/Dnllns/stegotool-java 
+ */
+
 package stegoTool.core;
 
 import java.awt.Color;

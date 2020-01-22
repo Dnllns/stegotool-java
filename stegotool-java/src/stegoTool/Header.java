@@ -1,3 +1,15 @@
+/**
+ *  __  _____  ____  __    ___  _____  ___   ___   _    
+ * ( (`  | |  | |_  / /`_ / / \  | |  / / \ / / \ | |   
+ * _)_)  |_|  |_|__ \_\_/ \_\_/  |_|  \_\_/ \_\_/ |_|__  
+ * ---------------------------------------------------- 
+ * 
+ * @author dnllns
+ * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
+ * @since early 2020 
+ * @see Source available on https://github.com/Dnllns/stegotool-java 
+ */
+
 package stegoTool;
 
 import stegoTool.encryption.AES;
@@ -11,6 +23,8 @@ public class Header {
     private String stegoAlgorithm;      // Used steganography algorithm
     private String encryptedHeader;     // Encrypted-header    
     private String headerPassword;      // Pasword for decrypt encrypted-header
+
+    //------------------------------------------------------------------------
 
     // region Constructor
 
@@ -53,6 +67,8 @@ public class Header {
 
     // endregion
 
+    //------------------------------------------------------------------------
+
     // region Methods
 
     /**
@@ -80,6 +96,8 @@ public class Header {
     }
 
     // endregion
+
+    //------------------------------------------------------------------------
 
     // region Getter & Setter
 
