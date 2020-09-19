@@ -5,14 +5,14 @@
  * ---------------------------------------------------- 
  * 
  * @author dnllns
- * @version v1.0 java, based on Estegomaquina's source (by Daniel Alonso)
+ * @version v1.1 java, based on Estegomaquina's source (by Daniel Alonso)
  * @since early 2020 
  * @see Source available on https://github.com/Dnllns/stegotool-java 
  * @see Based on Estegomaquina-Android, https://github.com/Dnllns/EstegoMaquina-Android
  *
  */
 
-package stegoTool.compression;
+package compression;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -23,11 +23,19 @@ import java.io.UnsupportedEncodingException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+
+/**
+ * Clase que implementa los metodos necesarios para comprimir y descomprimir 
+ * un array de bytes, empleando el algoritmo GZIP 
+ * 
+ * @author dnllns
+ *
+ */
 public class GZIPCompression {
 
-    public static byte[] compress(final String str) {
+    public byte[] compress( byte[] inputObject ) {
 
-        if ((str == null) || (str.length() == 0)) {
+        if (inputObject == null)  {
             return null;
         }
 
@@ -36,9 +44,10 @@ public class GZIPCompression {
         try {
             gzip = new GZIPOutputStream(obj);
             try {
-                gzip.write(str.getBytes("UTF-8"));
-            } catch (UnsupportedEncodingException ex) {
+                gzip.write(inputObject);
+            } catch (UnsupportedEncodingException ex) {            	
             }
+            
             gzip.flush();
             gzip.close();
 

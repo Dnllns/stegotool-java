@@ -12,9 +12,8 @@
  *
  */
 
-package stegoTool;
+package stegotool;
 
-import stegoTool.core.Core;
 
 public class MainLauncher {
 

@@ -12,7 +12,7 @@
  *
  */
 
-package stegoTool;
+package stegotool;
 
 import java.awt.Color;
 

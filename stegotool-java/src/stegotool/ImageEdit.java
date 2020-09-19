@@ -12,7 +12,7 @@
  *
  */
 
-package stegoTool;
+package stegotool;
 
 /**
  * @author Daniel Alonso Báscones, as dnllns

@@ -12,7 +12,7 @@
  *
  */
 
-package stegoTool.core;
+package stegotool.core;
 
 import java.awt.Color;
 import java.util.ArrayList;

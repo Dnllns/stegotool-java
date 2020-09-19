@@ -12,7 +12,7 @@
  *
  */
 
-package stegoTool.encryption;
+package encryption;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -20,10 +20,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class Md5 {
 
-    public static String getMD5(String input) {
+    public static String getMD5(byte[] input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(input.getBytes());
+            byte[] messageDigest = md.digest(input);
             BigInteger number = new BigInteger(1, messageDigest);
             String hashtext = number.toString(16);
 

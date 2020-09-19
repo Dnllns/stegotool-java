@@ -12,12 +12,12 @@
  *
  */
 
-package stegoTool;
+package stegotool;
 
-import stegoTool.core.CoreUtils;
 import java.util.Base64;
-import stegoTool.compression.GZIPCompression;
-import stegoTool.encryption.AES;
+import compression.GZIPCompression;
+import encryption.AES;
+import stegotool.core.CoreUtils;
 
 /**
  *
@@ -25,17 +25,37 @@ import stegoTool.encryption.AES;
  */
 public class Payload {
 
-    private String payload;         //payload en texto plano
+    private byte[] payload;    
+    private String fileType;
     
-
+    
+    private int rawPayloadSize;
+    private int encryptedPayloadSize;
+    private int compressedPayloadSize;
+    
+    
+    
+    //Constructores
+    //--------------------------------------------
+    
     /**
-     * Constructor
+     * Constructor string
      * @param data
      */
     public Payload(String data) {
-        payload = data + " ";
+        
+    	//Posible fix
+    	//payload = (data + " ").getBytes();
+    	
+    	payload = data.getBytes();
     }
+    
+    
+    
+    
 
+    
+    
     /**
      * Encode payload into a binary string
      * @return binary payload 
@@ -91,8 +111,12 @@ public class Payload {
         payload = header.length() + ";" + header + payload;
     }
 
-    public String getPayload() {
+    public byte[] getPayload() {
         return payload;
+    }
+    
+    public int getSize() {
+    	return this.payload.length;
     }
 
     

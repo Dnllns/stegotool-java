@@ -11,15 +11,11 @@
  * @see Based on Estegomaquina-Android, https://github.com/Dnllns/EstegoMaquina-Android
  *
  */
-package stegoTool.core;
+package stegotool.core;
 
-import stegoTool.Config;
-import stegoTool.Header;
-import stegoTool.ImageEdit;
-import stegoTool.Payload;
-import stegoTool.Pixel;
-import stegoTool.encryption.AES;
-import stegoTool.encryption.Md5;
+
+import encryption.AES;
+import encryption.Md5;
 
 /**
  *

@@ -12,7 +12,7 @@
  *
  */
 
-package stegoTool.encryption;
+package encryption;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
